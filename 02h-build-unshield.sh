@@ -3,9 +3,13 @@ set -e
 . ./_common.sh
 
 run_in_sandbox() {
-  sandbox-exec -f "$BUILD_SB" -D TMPDIR="$TMPDIR" -D HOME="$HOME" \
-    -D SRC="$PWD" -D BUILD="$PWD" -D INSTALLROOTROOT="$LIB" \
-    -D INSTALLROOT="$UNSHIELD_ROOT" "$@"
+    if [ "$TES3MP_MAC_DISABLE_SANDBOX" -eq 1 ]; then
+        "$@"
+    else
+        sandbox-exec -f "$BUILD_SB" -D TMPDIR="$TMPDIR" -D HOME="$HOME" \
+          -D SRC="$PWD" -D BUILD="$PWD" -D INSTALLROOTROOT="$LIB" \
+          -D INSTALLROOT="$UNSHIELD_ROOT" "$@"
+    fi
 }
 
 pushd "$SRC/pcre2"

@@ -12,6 +12,7 @@ BUILD_SB=${BUILD_SB:P}
 readonly SED=gsed  # TODO: Document need for gsed.
 
 readonly TES3MP_MAC_USE_SCCACHE=${TES3MP_MAC_USE_SCCACHE:-0}
+readonly TES3MP_MAC_DISABLE_SANDBOX=${TES3MP_MAC_DISABLE_SANDBOX:-0}
 export SCCACHE_CACHE_MULTIARCH=1
 
 export GETTEXT_DIR="$LIB/gettext"
@@ -98,5 +99,10 @@ universalize_install_dirs() {
 box() {
     local root="$1"
     shift
-    sandbox-exec -f "$BUILD_SB" -D TMPDIR="$TMPDIR" -D HOME="$HOME" -D SRC="$PWD" -D BUILD="$PWD" -D INSTALLROOT="$root" $*
+    # Use the macOS sandbox unless TES3MP_MAC_DISABLE_SANDBOX is set.
+    if [ "$TES3MP_MAC_DISABLE_SANDBOX" -eq 1 ]; then
+        $*
+    else
+        sandbox-exec -f "$BUILD_SB" -D TMPDIR="$TMPDIR" -D HOME="$HOME" -D SRC="$PWD" -D BUILD="$PWD" -D INSTALLROOT="$root" $*
+    fi
 }

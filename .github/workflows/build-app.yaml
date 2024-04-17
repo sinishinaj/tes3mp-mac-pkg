@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: macos-13
+    env:
+      TES3MP_MAC_DISABLE_SANDBOX: 1
     steps:
       - name: Run sccache-cache unless disabled
         if: inputs.disable_sccache != true
