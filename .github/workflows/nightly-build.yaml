@@ -1,0 +1,25 @@
+name: nightly-build
+on:
+  schedule:
+    - cron: "15 8 * * *"  # 8:15 AM UTC / 1:15 AM PDT
+jobs:
+  # Thanks to https://stackoverflow.com/a/76596449/110389
+  check:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: octokit/request-action@v2.x
+        id: check_last_run
+        with:
+          route: GET /repos/${{github.repository}}/actions/workflows/daily.yml/runs?per_page=1&status=completed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      last_sha: ${{ fromJson(steps.check_last_run.outputs.data).workflow_runs[0].head_sha }}
+    
+  build:
+    needs: [check]
+    if: needs.check.outputs.last_sha != github.sha
+    uses: ./.github/workflows/build-app.yaml
+    with:
+      disable_sccache: true
+    secrets: inherit
