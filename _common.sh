@@ -37,7 +37,7 @@ export LZ4_DIR="$LIB/lz4"
 export XZ_DIR="$LIB/xz"
 export MYGUI_HOME="$LIB/MyGUIEngine.framework"  # TODO: grep and replace
 
-export MACOSX_DEPLOYMENT_TARGET=12.0
+export MACOSX_DEPLOYMENT_TARGET=11.0
 
 # Use stock clang with sccache everywhere.
 export CC_NO_SCCACHE="/usr/bin/clang" CXX_NO_SCCACHE="/usr/bin/clang++"
