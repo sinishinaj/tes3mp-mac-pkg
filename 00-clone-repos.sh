@@ -64,7 +64,9 @@ download_tar "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.4
 download_tar "https://download.gnome.org/sources/glib/2.76/glib-2.76.3.tar.xz" \
   "$SRC/glib" \
   "c0be444e403d7c3184d1f394f89f0b644710b5e9331b54fa4e8b5037813ad32a"
-download_tar "https://sourceforge.net" "$SRC/boost" "6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e"
+download_tar "https://archives.boost.io/release/1.83.0/source/boost_1_83_0.tar.bz2" \
+    "$SRC/boost" \
+    "6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e"
 download_tar https://downloads.sourceforge.net/project/libjpeg-turbo/3.0.0/libjpeg-turbo-3.0.0.tar.gz \
     "$SRC/libjpeg-turbo" \
     "c77c65fcce3d33417b2e90432e7a0eb05f59a7fff884022a9d931775d583bfaa"
