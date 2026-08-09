@@ -39,6 +39,11 @@ export MYGUI_HOME="$LIB/MyGUIEngine.framework"  # TODO: grep and replace
 
 export MACOSX_DEPLOYMENT_TARGET=11.0
 
+# Several bundled dependencies (e.g. libpng) declare a cmake_minimum_required
+# below 3.5, which CMake >= 4.0 refuses to configure at all. This restores the
+# old lenient policy behavior instead of erroring out.
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
+
 # Use stock clang with sccache everywhere.
 export CC_NO_SCCACHE="/usr/bin/clang" CXX_NO_SCCACHE="/usr/bin/clang++"
 if [ "$TES3MP_MAC_USE_SCCACHE" -eq 1 ]; then
