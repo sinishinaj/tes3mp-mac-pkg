@@ -14,10 +14,14 @@ run_in_sandbox() {
 
 pushd "$SRC/xz"
 
-CFLAGS="-arch x86_64 -arch arm64" \
+if ! CFLAGS="-arch x86_64 -arch arm64" \
 CXXFLAGS="-arch x86_64 -arch arm64" \
     run_in_sandbox ./configure --disable-debug --disable-dependency-tracking \
-        --prefix="$XZ_DIR"
+        --prefix="$XZ_DIR"; then
+    echo "Configure failed, printing config.log..."
+    cat config.log
+    exit 1
+fi
 run_in_sandbox make clean
 run_in_sandbox make -j$(sysctl -n hw.logicalcpu)
 run_in_sandbox make -j1 install
