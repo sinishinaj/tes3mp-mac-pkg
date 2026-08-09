@@ -6,12 +6,13 @@ on:
       disable_sccache:
         required: false
         type: boolean
-        default: false
+        default: true
   workflow_call:
     inputs:
       disable_sccache:
         required: false
         type: boolean
+        default: true
 jobs:
   build:
     runs-on: macos-14
@@ -19,10 +20,10 @@ jobs:
       TES3MP_MAC_DISABLE_SANDBOX: 1
     steps:
       - name: Run sccache-cache unless disabled
-        if: inputs.disable_sccache != true
+        if: inputs.disable_sccache == false
         uses: mozilla-actions/sccache-action@v0.0.3
       - name: Configure sccache
-        if: inputs.disable_sccache != true
+        if: inputs.disable_sccache == false
         run: |
           echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
           echo "TES3MP_MAC_USE_SCCACHE=1" >> $GITHUB_ENV
