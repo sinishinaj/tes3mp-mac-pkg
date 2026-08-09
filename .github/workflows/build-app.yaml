@@ -8,7 +8,7 @@ on:
         type: boolean
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     env:
       TES3MP_MAC_DISABLE_SANDBOX: 1
     steps:
