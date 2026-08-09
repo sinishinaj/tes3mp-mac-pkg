@@ -1,6 +1,12 @@
 name: build-app
 on:
   push:
+  workflow_dispatch:
+    inputs:
+      disable_sccache:
+        required: false
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       disable_sccache:
