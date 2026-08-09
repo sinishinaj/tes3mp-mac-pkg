@@ -79,7 +79,7 @@ download_tar https://downloads.sourceforge.net/project/libpng/libpng16/1.6.40/li
 download_tar https://github.com/libsdl-org/SDL/releases/download/release-2.28.3/SDL2-2.28.3.tar.gz \
     "$SRC/SDL2" \
     "7acb8679652701a2504d734e2ba7543ec1a83e310498ddd22fd44bf965eb5518"
-download_tar "http://fresh-center.net/linux/misc/zlib-1.3.tar.gz" \
+download_tar "https://github.com/madler/zlib/releases/download/v1.3/zlib-1.3.tar.gz" \
     "$SRC/zlib" \
     "ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e"
 download_tar "https://github.com/OpenMW/osg/archive/e65f47c4ab3a0b53cc19f517961671e5f840a08d.zip" \
@@ -102,7 +102,7 @@ download_tar "https://ffmpeg.org/releases/ffmpeg-5.1.4.tar.xz" \
     "$SRC/ffmpeg" \
     "54383bb890a1cd62580e9f1eaa8081203196ed53bde9e98fb6b0004423f49063"
 
-download_tar "https://download.qt.io/official_releases/qt/5.15/5.15.10/single/qt-everywhere-opensource-src-5.15.10.tar.xz" \
+download_tar "https://download.qt.io/archive/qt/5.15/5.15.10/single/qt-everywhere-opensource-src-5.15.10.tar.xz" \
     "$SRC/qt5" \
     "b545cb83c60934adc9a6bbd27e2af79e5013de77d46f5b9f5bb2a3c762bf55ca"
 
