@@ -4,6 +4,10 @@ set -ex
 
 pushd "$SRC/mygui"
 
+# MyGUI hard-sets CMP0048 to OLD, which CMake >= 3.27 no longer supports
+# (it's a hard configure error, not just a warning). Force it to NEW.
+"$SED" -i 's/cmake_policy(SET CMP0048 OLD)/cmake_policy(SET CMP0048 NEW)/' CMakeLists.txt
+
 mkdir -p build
 pushd build
 # The following disables sccache even if TES3MP_MAC_USE_SCCACHE is set. I had
