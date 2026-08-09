@@ -85,6 +85,17 @@ download_tar "https://github.com/madler/zlib/releases/download/v1.3/zlib-1.3.tar
 download_tar "https://github.com/OpenMW/osg/archive/e65f47c4ab3a0b53cc19f517961671e5f840a08d.zip" \
     "$SRC/osg" \
     "a46dd4e3999985c2377dc9fdc0c5b37f41279f6aa95ae304de3e023cbb8b2cd6"
+
+# Fix a crash on launch on macOS: NotifySingleton's constructor runs at
+# static-init time (forced early via OSG_INIT_SINGLETON_PROXY) and does a
+# dynamic_cast on a stream buffer whose concrete type is already statically
+# known. On macOS/libc++, dynamic_cast needs bound RTTI symbols across dylib
+# boundaries, which aren't guaranteed to be ready this early in dyld's
+# initializer sequence, causing a SIGSEGV inside libc++abi's __dynamic_cast.
+# NotifyStream's own constructor next to this one already treats the same
+# cast as statically safe via static_cast; make NotifySingleton consistent.
+"$SED" -i 's/dynamic_cast<osg::NotifyStreamBuffer \*>(_notifyStream.rdbuf())/static_cast<osg::NotifyStreamBuffer *>(_notifyStream.rdbuf())/' \
+    "$SRC/osg/src/osg/Notify.cpp"
 download_tar "https://github.com/rdiankov/collada-dom/archive/v2.5.0.tar.gz" \
     "$SRC/collada-dom" \
     "3be672407a7aef60b64ce4b39704b32816b0b28f61ebffd4fbd02c8012901e0d"
