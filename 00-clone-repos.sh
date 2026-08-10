@@ -131,6 +131,41 @@ pushd "$SRC/TES3MP"
 "$SED" -i "/Settings::Manager mgr;/i #ifdef __APPLE__\nboost::filesystem::path binary_path = boost::filesystem::system_complete(boost::filesystem::path(argv[0]));\nboost::filesystem::current_path(binary_path.parent_path());\n#endif" ./apps/{browser,openmw-mp}/main.cpp
 # Fix the odd path separator used for macOS paths.
 "$SED" -i "/#define _SEP_ ':'/c\#define _SEP_ '/'" components/openmw-mp/Utils.cpp
+# Point the default client config at our private ZeroTier-hosted server instead
+# of localhost, so a fresh install connects directly without needing the
+# (ZeroTier-only, never publicly listed) server to be manually configured.
+"$SED" -i "s/destinationAddress = localhost/destinationAddress = 172.24.57.80/" files/tes3mp/tes3mp-client-default.cfg
+popd
+
+# Fix a crash on launch on macOS: BasePacketProcessor<T>::processors is a
+# namespace-scope static data member with vague linkage, implicitly
+# instantiated separately in ~10 translation units (one per processor type).
+# Its non-trivial (unordered_map) constructor runs eagerly during dyld's
+# static-initializer pass, before main() -- and before dyld is guaranteed to
+# have finished weak-binding the coalesced guard variable across all those
+# TUs, causing a null-pointer dereference inside the guard check. Convert it
+# to a function-local static (construct-on-first-use): it then only
+# initializes the first time AddProcessor()/Process() is actually called,
+# well after dyld has finished, eliminating this class of hazard entirely.
+pushd "$SRC/TES3MP"
+"$SED" -i \
+    -e 's/for (auto &p : processors)/for (auto \&p : processors())/' \
+    -e 's/processors\.insert(/processors().insert(/' \
+    -e 's/static processors_t processors;/static processors_t\& processors() { static processors_t instance; return instance; }/' \
+    components/openmw-mp/Base/BasePacketProcessor.hpp
+for f in \
+    apps/openmw/mwmp/processors/SystemProcessor.cpp \
+    apps/openmw/mwmp/processors/PlayerProcessor.cpp \
+    apps/openmw/mwmp/processors/ObjectProcessor.cpp \
+    apps/openmw/mwmp/processors/ActorProcessor.cpp \
+    apps/openmw/mwmp/processors/WorldstateProcessor.cpp \
+    apps/openmw-mp/processors/PlayerProcessor.cpp \
+    apps/openmw-mp/processors/ObjectProcessor.cpp \
+    apps/openmw-mp/processors/ActorProcessor.cpp \
+    apps/openmw-mp/processors/WorldstateProcessor.cpp; do
+    "$SED" -i '/^template<class T>$/{N;/BasePacketProcessor<T>::processors;$/d}' "$f"
+    "$SED" -i 's/for (auto &processor *: processors)/for (auto \&processor : processors())/' "$f"
+done
 popd
 
 # Fix for an MWSound infinite loop.
