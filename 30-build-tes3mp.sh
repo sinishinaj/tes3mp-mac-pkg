@@ -6,7 +6,7 @@ pushd "$SRC/TES3MP"
 
 mkdir -p build
 pushd build
-cmake -Wno-dev -DOPENMW_LTO_BUILD=ON \
+cmake -Wno-dev -DOPENMW_LTO_BUILD=OFF \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_OSX_ARCHITECTURES=arm64\;x86_64 \
       -DCMAKE_C_COMPILER="$CC_NO_SCCACHE" \
