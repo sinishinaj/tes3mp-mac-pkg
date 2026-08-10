@@ -12,7 +12,7 @@ rm -f b2 project-config* || true
     "--prefix=$BOOST_ROOT"
 ./b2 headers
 ./b2 toolset=clang-darwin target-os=darwin architecture=arm abi=aapcs \
-    cxxflags="-arch x86_64 -arch arm64 -fvisibility-inlines-hidden" cflags="-arch x86_64 -arch arm64" \
+    cxxflags="-arch x86_64 -arch arm64 " cflags="-arch x86_64 -arch arm64" \
     linkflags="-arch x86_64 -arch arm64" \
     "--prefix=$BOOST_ROOT" -j$(sysctl -n hw.logicalcpu) \
     -a -sNO_ZSTD=1 -sNO_LZMA=1 install
